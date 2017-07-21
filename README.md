@@ -63,7 +63,7 @@ You can also install stocks.js with [npm](https://www.npmjs.com/) (latest
 version required):
 
 ```cmd
-npm install stocks.js
+npm install stocks.js --save
 ```
 
 Now you have to request your *personal API Key* at Alpha Vantage. Claim your
