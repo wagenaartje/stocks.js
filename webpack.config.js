@@ -13,9 +13,12 @@ var data = {
     libraryTarget: 'umd'
   },
   plugins: [
-    new webpack.NoEmitOnErrorsPlugin()
-    //new webpack.BannerPlugin(license())
-  ]
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.BannerPlugin(license())
+  ],
+  externals: {
+    "xmlhttprequest": "XMLHttpRequest"
+  }
 };
 
 module.exports = data;

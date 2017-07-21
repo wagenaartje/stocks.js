@@ -1,12 +1,15 @@
 {
   "name": "stocks.js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "stocks.js offers an easy to use stock market data retrieval API",
   "main": "./src/stocks",
   "scripts": {
     "build:dist": "webpack",
     "deploy": "npm run test:travis && npm publish",
-    "test:travis": "npm run build:dist && npm run test:dist"
+    "test:travis": "npm run build:dist"
+  },
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "semistandard": "*"

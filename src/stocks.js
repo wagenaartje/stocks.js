@@ -1,3 +1,9 @@
+/** Import */
+if (typeof window === 'undefined') {
+  // Seems like we are using Node.js
+  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+}
+
 /*******************************************************************************
                                   STOCKS
 *******************************************************************************/
