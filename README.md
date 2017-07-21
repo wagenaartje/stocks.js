@@ -6,6 +6,7 @@
 </p>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/stocks.js"><img src="https://img.shields.io/npm/v/stocks.js.svg?style=flat-square"></a>
   <a href="https://travis-ci.org/wagenaartje/stocks.js"><img src="https://img.shields.io/travis/wagenaartje/stocks.js/master.svg?style=flat-square"></a>
 </p>
 
@@ -56,6 +57,13 @@ in your `.html` file:
 
 ```html
 <script src="stocks.js"></script>
+```
+
+You can also install stocks.js with [npm](https://www.npmjs.com/) (latest
+version required):
+
+```cmd
+npm install stocks.js
 ```
 
 Now you have to request your *personal API Key* at Alpha Vantage. Claim your
