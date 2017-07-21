@@ -21,7 +21,7 @@ indicators that can be tracked with this library.
 
 > :bulb: This library is very new, so you might experience issues. If you do,
 please report them at the [issues](https://github.com/wagenaartje/stocks.js/issues)
-section. A Node.js compatible version will be released soon.
+section. 
 
 This is an example of regular stock time series retrieval
 ([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/)):
