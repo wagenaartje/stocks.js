@@ -22,11 +22,12 @@ indicators that can be tracked with this library.
 please report them at the [issues](https://github.com/wagenaartje/stocks.js/issues)
 section. A Node.js compatible version will be released soon.
 
-This is an example of regular stock time series retrieval:
+This is an example of regular stock time series retrieval
+([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/)):
 
 
 ```js
-// Let's get the stock data of Tesla Inc for the last 10 minutes
+// Let's get the stock data of Tesla Inc. for the last 10 minutes
 var result = stocks.timeSeries({
   symbol: 'TSLA',
   interval: '1min',
@@ -34,7 +35,8 @@ var result = stocks.timeSeries({
  });
 ```
 
-And this is an example of how to retrieve a [technical indicator](https://www.alphavantage.co/documentation/#technical-indicators):
+And this is an example of how to retrieve a [technical indicator](https://www.alphavantage.co/documentation/#technical-indicators)
+([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/1/)):
 
 ```js
 // Let's get the directional movement index of Microsoft Corporation for the
