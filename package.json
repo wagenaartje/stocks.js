@@ -1,0 +1,35 @@
+{
+  "name": "stocks.js",
+  "version": "0.0.1",
+  "description": "stocks.js offers an easy to use stock market data retrieval API",
+  "main": "./src/stocks",
+  "scripts": {
+    "build:dist": "webpack",
+    "deploy": "npm run test:travis && npm publish",
+    "test:travis": "npm run build:dist && npm run test:dist"
+  },
+  "devDependencies": {
+    "semistandard": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wagenaartje/stocks.js.git"
+  },
+  "keywords": [
+    "stocks",
+    "market",
+    "api"
+  ],
+  "author": {
+    "name": "Thomas Wagenaar",
+    "email": "wagenaartje@protonmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wagenaartje/stocks.js/issues",
+    "email": "wagenaartje@protonmail.com"
+  },
+  "engines": {
+    "node": ">=8"
+  }
+}

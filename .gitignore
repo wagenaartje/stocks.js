@@ -1,0 +1,6 @@
+# Debug
+debug
+
+# Development files
+node_modules
+npm-debug.log
