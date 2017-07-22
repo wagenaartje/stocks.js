@@ -2,7 +2,7 @@
 
 <h3 align='center'>Stocks.js</h3>
 <p align="center">
-  Easy to use stocks API for the browser</a>
+  Easy-to-use stocks API for Node.js and the browser</a>
 </p>
 
 <p align="center">
