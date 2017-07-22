@@ -1,6 +1,6 @@
 {
   "name": "stocks.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "stocks.js offers an easy to use stock market data retrieval API",
   "main": "./src/stocks",
   "scripts": {

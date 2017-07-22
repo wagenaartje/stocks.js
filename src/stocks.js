@@ -67,7 +67,13 @@ var stocks = {
         `No 'interval' option specified, please set to any of the following:` +
          stocks.INTERVALS.join(', ')
       );
-    } else if (typeof options.amount === 'undefined') {
+    } else if (typeof options.start !== 'undefined' &&
+               typeof options.amount !== 'undefined') {
+      throw new Error(`Only 'start'-'end' OR 'amount' can be specified!`);
+    }
+
+    if (typeof options.amount === 'undefined' &&
+        options.start === 'undefined') {
       console.warn(
         `No 'amount' option specified, returning maximum amount of datapoints`
       );
@@ -123,6 +129,20 @@ var stocks = {
     return newData;
   },
 
+  _getBetween: function (data, start, end) {
+    // Can be optimized by calculating index of start and end dates in list
+    var newData = [];
+    for (var i = 0; i < data.length; i++) {
+      let sample = data[i];
+
+      if (start <= sample.date && sample.date <= end) {
+        newData.push(sample);
+      }
+    }
+
+    return newData;
+  },
+
   /** Public functions */
   timeSeries: async function (options) {
     stocks._checkOptions(options, 'timeseries');
@@ -145,7 +165,13 @@ var stocks = {
 
     // Get result
     var result = await stocks._doRequest(url);
-    return stocks._convertData(result, options.amount);
+    var converted = stocks._convertData(result, options.amount);
+
+    if (typeof options.start !== 'undefined') {
+      converted = stocks._getBetween(converted, options.start, options.end);
+    }
+
+    return converted;
   },
 
   technicalIndicator: async function (options) {

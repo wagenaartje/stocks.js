@@ -6,8 +6,10 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/stocks.js"><img src="https://img.shields.io/npm/v/stocks.js.svg?style=flat-square"></a>
-  <a href="https://travis-ci.org/wagenaartje/stocks.js"><img src="https://img.shields.io/travis/wagenaartje/stocks.js/master.svg?style=flat-square"></a>
+  <a href="https://www.npmjs.com/package/stocks.js">
+  <img src="https://img.shields.io/npm/v/stocks.js.svg?style=flat-square"></a>
+  <a href="https://travis-ci.org/wagenaartje/stocks.js">
+  <img src="https://img.shields.io/travis/wagenaartje/stocks.js/master.svg?style=flat-square"></a>
 </p>
 
 &zwnj;
@@ -21,7 +23,7 @@ indicators that can be tracked with this library.
 
 > :bulb: This library is very new, so you might experience issues. If you do,
 please report them at the [issues](https://github.com/wagenaartje/stocks.js/issues)
-section. 
+section.
 
 This is an example of regular stock time series retrieval
 ([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/)):
@@ -98,6 +100,8 @@ from any of the following intervals: '1min', '5min', '15min', '30min', '60min',
 the data points of the current day.
 * `amount`, the amount of data points to fetch. If not specified, will return
 all possible data points up to a maximum twenty years ago.
+* `start & end`, the start and end dates from which to get data from in between.
+_Cannot_ be used in combination with amount
 
 So an example of options could be:
 
@@ -107,6 +111,17 @@ var options = {
   interval: 'weekly',
   amount: 52
 };
+```
+
+Or to get data in between two dates (click to run):
+
+```js
+var options = {
+  symbol: 'TSLA',
+  interval: 'daily',
+  start: new Date('2017-07-01'),
+  end: new Date('2017-07-09')
+}
 ```
 
 The result of such a request is an array with `amount` elements, easy element is
@@ -159,6 +174,8 @@ example, if set to 10, the indicator value will be calculated using 10 data
 points. Does not affect all indicators.
 * `amount`, the amount of data points to fetch. If not specified, will return
 all possible data points up to a maximum twenty years ago.
+* `start & end`, the start and end dates from which to get data from in between.
+_Cannot_ be used in combination with amount
 
 ```js
 var options = {
