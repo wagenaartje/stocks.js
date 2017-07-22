@@ -29,7 +29,7 @@ This is an example of regular stock time series retrieval
 
 ```js
 // Let's get the stock data of Tesla Inc. for the last 10 minutes
-var result = stocks.timeSeries({
+var result = await stocks.timeSeries({
   symbol: 'TSLA',
   interval: '1min',
   amount: 10
