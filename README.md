@@ -12,7 +12,7 @@
 
 &zwnj;
 
-<hr>
+#
 
 `stocks.js` allows easy retrieval of stock data - without having to pay a single
 dollar. The library uses [Alpha Vantage](https://www.alphavantage.co/) as its
