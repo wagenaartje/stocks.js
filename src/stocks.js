@@ -1,7 +1,7 @@
 /** Import */
 if (typeof window === 'undefined') {
   // Seems like we are using Node.js
-  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+  var NodeXMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 }
 
 /*******************************************************************************
@@ -26,7 +26,8 @@ var stocks = {
     }
 
     return new Promise((resolve, reject) => {
-      var request = new XMLHttpRequest();
+      var request = typeof window !== 'undefined'
+        ? new XMLHttpRequest() : new NodeXMLHttpRequest();
       request.open('GET', url, true);
 
       request.onload = function (e) {
@@ -144,7 +145,6 @@ var stocks = {
 
     // Get result
     var result = await stocks._doRequest(url);
-    console.log(result);
     return stocks._convertData(result, options.amount);
   },
 
@@ -166,20 +166,8 @@ var stocks = {
 };
 
 /** Export */
-// Node.js
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = stocks;
-}
-
-// Browser
-if (typeof window === 'object') {
-  (function () {
-    var old = window['stocks'];
-    stocks.ninja = function () {
-      window['stocks'] = old;
-      return stocks;
-    };
-  })();
-
-  window['stocks'] = stocks;
+  module.exports = stocks; // Node.js
+} else {
+  window['stocks'] = stocks; // Browser
 }

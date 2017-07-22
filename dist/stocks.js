@@ -31,7 +31,7 @@
 		exports["stocks"] = factory(require("XMLHttpRequest"));
 	else
 		root["stocks"] = factory(root["XMLHttpRequest"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_0__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -40,9 +40,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -66,9 +66,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -97,23 +94,17 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /** Import */
 if (typeof window === 'undefined') {
   // Seems like we are using Node.js
-  var XMLHttpRequest = __webpack_require__(0).XMLHttpRequest;
+  var NodeXMLHttpRequest = __webpack_require__(1).XMLHttpRequest;
 }
 
 /*******************************************************************************
@@ -138,7 +129,8 @@ var stocks = {
     }
 
     return new Promise((resolve, reject) => {
-      var request = new XMLHttpRequest();
+      var request = typeof window !== 'undefined'
+        ? new XMLHttpRequest() : new NodeXMLHttpRequest();
       request.open('GET', url, true);
 
       request.onload = function (e) {
@@ -256,7 +248,6 @@ var stocks = {
 
     // Get result
     var result = await stocks._doRequest(url);
-    console.log(result);
     return stocks._convertData(result, options.amount);
   },
 
@@ -278,24 +269,18 @@ var stocks = {
 };
 
 /** Export */
-// Node.js
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = stocks;
+  module.exports = stocks; // Node.js
+} else {
+  window['stocks'] = stocks; // Browser
 }
 
-// Browser
-if (typeof window === 'object') {
-  (function () {
-    var old = window['stocks'];
-    stocks.ninja = function () {
-      window['stocks'] = old;
-      return stocks;
-    };
-  })();
 
-  window['stocks'] = stocks;
-}
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
 
+module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ })
 /******/ ]);

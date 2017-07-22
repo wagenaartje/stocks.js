@@ -7,7 +7,7 @@ var data = {
     'dist/stocks': './src/stocks.js'
   },
   output: {
-    path: './',
+    path: __dirname,
     filename: '[name].js',
     library: 'stocks',
     libraryTarget: 'umd'
@@ -17,7 +17,7 @@ var data = {
     new webpack.BannerPlugin(license())
   ],
   externals: {
-    "xmlhttprequest": "XMLHttpRequest"
+    xmlhttprequest: 'XMLHttpRequest'
   }
 };
 

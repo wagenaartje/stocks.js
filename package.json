@@ -1,6 +1,6 @@
 {
   "name": "stocks.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "stocks.js offers an easy to use stock market data retrieval API",
   "main": "./src/stocks",
   "scripts": {
@@ -12,7 +12,8 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "semistandard": "*"
+    "semistandard": "*",
+    "webpack": "^3.3.0"
   },
   "repository": {
     "type": "git",
