@@ -101,7 +101,8 @@ the data points of the current day.
 * `amount`, the amount of data points to fetch. If not specified, will return
 all possible data points up to a maximum twenty years ago.
 * `start & end`, the start and end dates from which to get data from in between.
-_Cannot_ be used in combination with amount
+_Cannot_ be used in combination with the amount option. For any interval shorter
+than daily, specify intraday dates.
 
 So an example of options could be:
 
@@ -113,7 +114,7 @@ var options = {
 };
 ```
 
-Or to get data in between two dates (click to run):
+Or to get data in between two dates ([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/2/)):
 
 ```js
 var options = {
@@ -175,7 +176,8 @@ points. Does not affect all indicators.
 * `amount`, the amount of data points to fetch. If not specified, will return
 all possible data points up to a maximum twenty years ago.
 * `start & end`, the start and end dates from which to get data from in between.
-_Cannot_ be used in combination with amount
+_Cannot_ be used in combination with the amount option. For any interval shorter
+than daily, specify intraday dates.
 
 ```js
 var options = {
