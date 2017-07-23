@@ -306,7 +306,13 @@ var stocks = {
 
     // Get result
     var result = await stocks._doRequest(params);
-    return stocks._convertData(result, options.amount);
+    var converted = stocks._convertData(result, options.amount);
+
+    if (typeof options.start !== 'undefined') {
+      converted = stocks._getBetween(converted, options.start, options.end);
+    }
+
+    return converted;
   },
 
   sectorPerformance: async function (options = {}) {
