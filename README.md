@@ -215,8 +215,8 @@ where *options* is an object containing any of the following options:
 from any of the following timespans: 'real-time', '1day', '5day', '1month',
 '3month', 'year-to-date', '1year', '3year', '5year', '10year'
 
-So an example of options could be (
-[click to run](https://jsfiddle.net/wagenaartje/up4nnr4a/1/)):
+So an example of options could be
+([click to run](https://jsfiddle.net/wagenaartje/up4nnr4a/1/)):
 
 ```js
 var options = {
