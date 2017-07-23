@@ -13,34 +13,35 @@ var stocks = {
   DEFAULT_URL: 'https://www.alphavantage.co/query?',
   API_KEY_URL: 'https://www.alphavantage.co/support/#api-key',
   INTERVALS: [
-    '1min', '5min', '15min', '30min',
-    '60min', 'daily', 'weekly', 'monthly'
+    '1min', '5min', '15min', '30min', '60min', 'daily', 'weekly', 'monthly'
+  ],
+  PERFORMANCES: [
+    'real-time', '1day', '5day', '1month', '3month', 'year-to-date', '1year',
+    '3year', '5year', '10year'
   ],
 
-  _createUrl: function(params) {
+  /** Private functions */
+  _createUrl: function (params) {
     if (!params) {
-      throw new Error(
-        `Params is undefined`
-      );
+      throw new Error(`Params is undefined`);
     }
 
     var url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
     var keys = Object.keys(params);
-    keys.forEach(function(){
-        url += `${k}=${v}&`;
+    keys.forEach(function (key) {
+        url += `${key}=${params[key]}&`;
     });
-    
+
     return url;
   },
 
-  /** Private functions */
   _doRequest: function (params) {
     if (typeof stocks.API_KEY === 'undefined') {
       throw new Error(
         `You must first claim your API Key at ${stocks.API_KEY_URL}`
       );
     }
-    
+
     return new Promise((resolve, reject) => {
       var request = typeof window !== 'undefined'
         ? new XMLHttpRequest() : new NodeXMLHttpRequest();
@@ -81,8 +82,8 @@ var stocks = {
     } else if (typeof options.interval === 'undefined' ||
                stocks.INTERVALS.indexOf(options.interval) === -1) {
       throw new Error(
-        `No 'interval' option specified, please set to any of the following:` +
-         stocks.INTERVALS.join(', ')
+        `No (correct) 'interval' option specified, please set to any of the ` +
+        `following: ${stocks.INTERVALS.join(', ')}`
       );
     } else if (typeof options.start !== 'undefined' &&
                typeof options.amount !== 'undefined') {
@@ -161,7 +162,7 @@ var stocks = {
   },
 
   /** Public functions */
-  timeSeries: async function (options) {
+  timeSeries: async function (options = {}) {
     stocks._checkOptions(options, 'timeseries');
 
     if (stocks.INTERVALS.slice(0, 5).indexOf(options.interval) > -1) {
@@ -170,10 +171,10 @@ var stocks = {
     }
 
     var params = {
-      function:`TIME_SERIES_${options.interval}`,
-      symbol:options.symbol,
-      outputsize: "full",
-    }
+      function: `TIME_SERIES_${options.interval}`,
+      symbol: options.symbol,
+      outputsize: 'full'
+    };
 
     if (options.interval === 'intraday') {
       params[interval] += interval;
@@ -190,19 +191,47 @@ var stocks = {
     return converted;
   },
 
-  technicalIndicator: async function (options) {
+  technicalIndicator: async function (options = {}) {
     stocks._checkOptions(options, 'technical');
 
     var params = {
-      function:options.indicator,
-      symbol:options.symbol,
+      function: options.indicator,
+      symbol: options.symbol,
       interval: options.interval,
-      time_period: options.time_period,
-    }
+      time_period: options.time_period
+    };
 
     // Get result
     var result = await stocks._doRequest(params);
     return stocks._convertData(result, options.amount);
+  },
+
+  sectorPerformance: async function (options = {}) {
+    if (typeof options.timespan === 'undefined' ||
+               stocks.PERFORMANCES.indexOf(options.timespan) === -1) {
+      throw new Error(`No (correct) 'interval' option specified, please set ` +
+        `to any ofthe following: ${stocks.PERFORMANCES.join(', ')}`
+      );
+    }
+
+    var params = {
+      function: 'SECTOR'
+    };
+
+    var result = await stocks._doRequest(params);
+    var keys = Object.keys(result);
+
+    for (var i = 0; i < keys.length; i++) {
+      let key = keys[i];
+      key = key.replace(/ /g, '').toLowerCase();
+      if (key.indexOf(options.timespan) !== -1) {
+        result = result[keys[i]];
+        for (var j in result) {
+          result[j] = Number(result[j].replace('%', ''));
+        }
+        return result;
+      }
+    }
   }
 };
 

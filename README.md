@@ -38,7 +38,8 @@ var result = await stocks.timeSeries({
  });
 ```
 
-And this is an example of how to retrieve a [technical indicator](https://www.alphavantage.co/documentation/#technical-indicators)
+And this is an example of how to retrieve a [technical
+indicator](https://www.alphavantage.co/documentation/#technical-indicators)
 ([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/1/)):
 
 ```js
@@ -81,9 +82,11 @@ now. View the *Usage* paragraph below to see how you can fetch data.
 
 
 ## Usage
-The first function to discuss is the `stocks.timeSeries()` function. This
-function allows you to retrieve data from now, up to 20 years to the past. The
-basic usage is as follows:
+At this moment, stocks.js supports 3 stock market data functions.
+
+### stocks.timeSeries()
+This function allows you to retrieve data from now, up to 20 years to the past.
+The basic usage is as follows:
 
 ```js
 var result = await stocks.timeSeries(options);
@@ -125,21 +128,21 @@ var options = {
 }
 ```
 
-The result of such a request is an array with `amount` elements, easy element is
-an object that includes the following keys and corresponding values:
+The result of such a request is an array with `amount` elements (or every
+element between `start` and `end`), every element is an object that includes the
+following keys and corresponding values:
 
 ```js
 close, high, low, open, volume, date
 ```
 
-<hr>
+### stocks.technicalIndicator()
 
-The second function offered in `stocks.js` is `stocks.technicalIndicator()`,
-which allows you to fetch certain technical indicators regarding the stock. The
-basic usage is as follows:
+This function allows you to fetch certain technical indicators regarding the
+stock. The basic usage is as follows:
 
 ```js
-var result = await stocks.timeSeries(options)
+var result = await stocks.technicalIndicator(options);
 ```
 
 where *options* is an object containing any of the following options:
@@ -179,6 +182,8 @@ all possible data points up to a maximum twenty years ago.
 _Cannot_ be used in combination with the amount option. For any interval shorter
 than daily, specify intraday dates.
 
+So an example of options could be:
+
 ```js
 var options = {
   symbol: 'NOK',
@@ -189,11 +194,41 @@ var options = {
 };
 ```
 
-The result of such a request is an array with `amount` elements, easy element is
-an object that includes the following keys and corresponding values:
+The result of such a request is an array with `amount` elements, every element
+is an object that includes the following keys and corresponding values:
 
 ```js
 (indicator name), date
+```
+
+### stocks.sectorPerformance()
+This function will fetch the US sector performance calculated from S&P500
+incumbents. The basic usage is as follows:
+
+```js
+var result = await stocks.sectorPerformance(options);
+```
+
+where *options* is an object containing any of the following options:
+
+* `REQ timespan`, the timespan of which to get the sector performance. Choose
+from any of the following timespans: 'real-time', '1day', '5day', '1month',
+'3month', 'year-to-date', '1year', '3year', '5year', '10year'
+
+So an example of options could be:
+
+```js
+var options = {
+  timespan: 'year-to-date'
+};
+```
+
+The result of such a request will be an object containing the following values:
+
+```js
+Utilities, Consumer Staples, Real Estate, Consumer Discretionary,
+Telecommunication Services, Materials, Financials, Health Care,
+Information Technology, Industrials, Energy
 ```
 
 ## Contributing
@@ -205,7 +240,7 @@ get is useful.
 ## Further notices
 All the data comes from [Alpha Vantage](https://www.alphavantage.co/), although
 they exist for some time now, it is quite unclear what their business model is.
-They also don't provide a lot of information on their sources and why an API
+They also do not provide a lot of information on their sources and why an API
 Key is needed. So please note the risk that from one day to the other their
 service might stop.
 
