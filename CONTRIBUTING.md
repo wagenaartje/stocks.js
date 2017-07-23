@@ -28,5 +28,6 @@ multiple developers can share their opinion on your proposals. A list of
 proposed plans:
 
 * More data sources than just [Alpha Vantage](https://www.alphavantage.co/)
+* Mocha testing
 
 *If you feel like anything should be added, feel free to create a PR or issue*
