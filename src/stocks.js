@@ -17,17 +17,34 @@ var stocks = {
     '60min', 'daily', 'weekly', 'monthly'
   ],
 
+  _createUrl: function(params) {
+    if (!params) {
+      throw new Error(
+        `Params is undefined`
+      );
+    }
+
+    var url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
+    var keys = Object.keys(params);
+    keys.forEach(function(){
+        url += `${k}=${v}&`;
+    });
+    
+    return url;
+  },
+
   /** Private functions */
-  _doRequest: function (url) {
+  _doRequest: function (params) {
     if (typeof stocks.API_KEY === 'undefined') {
       throw new Error(
         `You must first claim your API Key at ${stocks.API_KEY_URL}`
       );
     }
-
+    
     return new Promise((resolve, reject) => {
       var request = typeof window !== 'undefined'
         ? new XMLHttpRequest() : new NodeXMLHttpRequest();
+      var url = stocks._createUrl(params);
       request.open('GET', url, true);
 
       request.onload = function (e) {
@@ -152,19 +169,18 @@ var stocks = {
       options.interval = 'intraday';
     }
 
-    // Construct request
-    var url = stocks.DEFAULT_URL;
-    url += `function=TIME_SERIES_${options.interval}&`;
-    url += `symbol=${options.symbol}&`;
-    url += 'outputsize=full&';
-    url += `apikey=${stocks.API_KEY}`;
+    var params = {
+      function:`TIME_SERIES_${options.interval}`,
+      symbol:options.symbol,
+      outputsize: "full",
+    }
 
     if (options.interval === 'intraday') {
-      url += `&interval=${interval}`;
+      params[interval] += interval;
     }
 
     // Get result
-    var result = await stocks._doRequest(url);
+    var result = await stocks._doRequest(params);
     var converted = stocks._convertData(result, options.amount);
 
     if (typeof options.start !== 'undefined') {
@@ -177,16 +193,15 @@ var stocks = {
   technicalIndicator: async function (options) {
     stocks._checkOptions(options, 'technical');
 
-    // Construct request
-    var url = stocks.DEFAULT_URL;
-    url += `function=${options.indicator}&`;
-    url += `symbol=${options.symbol}&`;
-    url += `interval=${options.interval}&`;
-    url += `time_period=${options.time_period}&`;
-    url += `apikey=${stocks.API_KEY}`;
+    var params = {
+      function:options.indicator,
+      symbol:options.symbol,
+      interval: options.interval,
+      time_period: options.time_period,
+    }
 
     // Get result
-    var result = await stocks._doRequest(url);
+    var result = await stocks._doRequest(params);
     return stocks._convertData(result, options.amount);
   }
 };
