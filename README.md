@@ -196,6 +196,12 @@ an object that includes the following keys and corresponding values:
 (indicator name), date
 ```
 
+## Contributing
+If you want to contribute to this project, please read the [contributing guide](https://github.com/wagenaartje/stocks.js/blob/master/CONTRIBUTING.md)
+over here. You can also participate in the discussions at the [issues
+section](https://github.com/wagenaartje/stocks.js/issues), every opinion we can
+get is useful.
+
 ## Further notices
 All the data comes from [Alpha Vantage](https://www.alphavantage.co/), although
 they exist for some time now, it is quite unclear what their business model is.
