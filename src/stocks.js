@@ -26,8 +26,8 @@ var stocks = {
 
     var url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
     var keys = Object.keys(params);
-    keys.forEach(function(){
-        url += `${k}=${v}&`;
+    keys.forEach(function(key){
+        url += `${key}=${keys[key]}&`;
     });
     
     return url;
