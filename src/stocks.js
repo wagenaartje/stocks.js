@@ -8,7 +8,7 @@ if (typeof window === 'undefined') {
                                   STOCKS
 *******************************************************************************/
 
-var stocks = {
+const stocks = {
   /** Constants */
   DEFAULT_URL: 'https://www.alphavantage.co/query?',
   API_KEY_URL: 'https://www.alphavantage.co/support/#api-key',
@@ -24,10 +24,10 @@ var stocks = {
       );
     }
 
-    var url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
-    var keys = Object.keys(params);
+    let url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
+    const keys = Object.keys(params);
     keys.forEach(function(key){
-        url += `${key}=${keys[key]}&`;
+        url += `${key}=${params[key]}&`;
     });
     
     return url;
@@ -42,15 +42,15 @@ var stocks = {
     }
     
     return new Promise((resolve, reject) => {
-      var request = typeof window !== 'undefined'
+      const request = typeof window !== 'undefined'
         ? new XMLHttpRequest() : new NodeXMLHttpRequest();
-      var url = stocks._createUrl(params);
+      const url = stocks._createUrl(params);
       request.open('GET', url, true);
 
       request.onload = function (e) {
         if (request.readyState === 4) {
           if (request.status === 200) {
-            var result = JSON.parse(request.responseText);
+            const result = JSON.parse(request.responseText);
             if (typeof result['Error Message'] !== 'undefined') {
               throw new Error(
                 'An error occured. Please create an issue at ' +
@@ -107,8 +107,8 @@ var stocks = {
 
   _convertData: function (data, amount) {
     // Strip meta data
-    var keys = Object.keys(data);
-    for (var i = 0; i < keys.length; i++) {
+    let keys = Object.keys(data);
+    for (let i = 0; i < keys.length; i++) {
       if (keys[i].indexOf('Time Series') !== -1 ||
           keys[i].indexOf('Technical') !== -1) {
         data = data[keys[i]];
@@ -116,7 +116,7 @@ var stocks = {
       }
     }
 
-    var newData = [];
+    const newData = [];
 
     // Process all elements
     keys = Object.keys(data);
@@ -131,7 +131,7 @@ var stocks = {
       // Smoothen up the keys and values in each sample
       let newSample = {};
       let sampleKeys = Object.keys(data[key]);
-      for (var j = 0; j < sampleKeys.length; j++) {
+      for (let j = 0; j < sampleKeys.length; j++) {
         let sampleKey = sampleKeys[j];
         let newSampleKey = sampleKey.replace(/.+. /, '');
         newSample[newSampleKey] = Number(data[key][sampleKey]);
@@ -148,8 +148,8 @@ var stocks = {
 
   _getBetween: function (data, start, end) {
     // Can be optimized by calculating index of start and end dates in list
-    var newData = [];
-    for (var i = 0; i < data.length; i++) {
+    const newData = [];
+    for (let i = 0; i < data.length; i++) {
       let sample = data[i];
 
       if (start <= sample.date && sample.date <= end) {
@@ -163,15 +163,16 @@ var stocks = {
   /** Public functions */
   timeSeries: async function (options) {
     stocks._checkOptions(options, 'timeseries');
+    const { symbol, start, end, amount } = options;
 
     if (stocks.INTERVALS.slice(0, 5).indexOf(options.interval) > -1) {
-      var interval = options.interval;
+      let interval = options.interval;
       options.interval = 'intraday';
     }
 
-    var params = {
+    const params = {
       function:`TIME_SERIES_${options.interval}`,
-      symbol:options.symbol,
+      symbol: symbol,
       outputsize: "full",
     }
 
@@ -180,11 +181,11 @@ var stocks = {
     }
 
     // Get result
-    var result = await stocks._doRequest(params);
-    var converted = stocks._convertData(result, options.amount);
+    const result = await stocks._doRequest(params);
+    let converted = stocks._convertData(result, amount);
 
-    if (typeof options.start !== 'undefined') {
-      converted = stocks._getBetween(converted, options.start, options.end);
+    if (typeof start !== 'undefined') {
+      converted = stocks._getBetween(converted, start, end);
     }
 
     return converted;
@@ -192,16 +193,16 @@ var stocks = {
 
   technicalIndicator: async function (options) {
     stocks._checkOptions(options, 'technical');
-
-    var params = {
-      function:options.indicator,
-      symbol:options.symbol,
-      interval: options.interval,
-      time_period: options.time_period,
+    const { indicator, symbol, interval, time_period, amount } = options;
+    const params = {
+      function: indicator,
+      symbol,
+      interval,
+      time_period,
     }
 
     // Get result
-    var result = await stocks._doRequest(params);
+    const result = await stocks._doRequest(params);
     return stocks._convertData(result, options.amount);
   }
 };

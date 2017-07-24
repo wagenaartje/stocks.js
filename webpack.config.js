@@ -12,6 +12,20 @@ var data = {
     library: 'stocks',
     libraryTarget: 'umd'
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env']
+          }
+        }
+      }
+    ]
+  },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.BannerPlugin(license())

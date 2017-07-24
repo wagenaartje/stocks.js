@@ -101,6 +101,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 /** Import */
 if (typeof window === 'undefined') {
   // Seems like we are using Node.js
@@ -115,22 +120,31 @@ var stocks = {
   /** Constants */
   DEFAULT_URL: 'https://www.alphavantage.co/query?',
   API_KEY_URL: 'https://www.alphavantage.co/support/#api-key',
-  INTERVALS: [
-    '1min', '5min', '15min', '30min',
-    '60min', 'daily', 'weekly', 'monthly'
-  ],
+  INTERVALS: ['1min', '5min', '15min', '30min', '60min', 'daily', 'weekly', 'monthly'],
 
-  /** Private functions */
-  _doRequest: function (url) {
-    if (typeof stocks.API_KEY === 'undefined') {
-      throw new Error(
-        `You must first claim your API Key at ${stocks.API_KEY_URL}`
-      );
+  _createUrl: function _createUrl(params) {
+    if (!params) {
+      throw new Error('Params is undefined');
     }
 
-    return new Promise((resolve, reject) => {
-      var request = typeof window !== 'undefined'
-        ? new XMLHttpRequest() : new NodeXMLHttpRequest();
+    var url = stocks.DEFAULT_URL + 'apikey=' + stocks.API_KEY + '&';
+    var keys = Object.keys(params);
+    keys.forEach(function (key) {
+      url += key + '=' + params[key] + '&';
+    });
+
+    return url;
+  },
+
+  /** Private functions */
+  _doRequest: function _doRequest(params) {
+    if (typeof stocks.API_KEY === 'undefined') {
+      throw new Error('You must first claim your API Key at ' + stocks.API_KEY_URL);
+    }
+
+    return new Promise(function (resolve, reject) {
+      var request = typeof window !== 'undefined' ? new XMLHttpRequest() : new NodeXMLHttpRequest();
+      var url = stocks._createUrl(params);
       request.open('GET', url, true);
 
       request.onload = function (e) {
@@ -138,11 +152,7 @@ var stocks = {
           if (request.status === 200) {
             var result = JSON.parse(request.responseText);
             if (typeof result['Error Message'] !== 'undefined') {
-              throw new Error(
-                'An error occured. Please create an issue at ' +
-                'https://github.com/wagenaartje/stocks/issues with your code, ' +
-                `and provide the following message: ${result['Error Message']}`
-              );
+              throw new Error('An error occured. Please create an issue at ' + 'https://github.com/wagenaartje/stocks/issues with your code, ' + ('and provide the following message: ' + result['Error Message']));
             }
 
             resolve(result);
@@ -159,44 +169,35 @@ var stocks = {
     });
   },
 
-  _checkOptions: function (options, type) {
+  _checkOptions: function _checkOptions(options, type) {
     if (typeof options === 'undefined') {
       throw new Error('You have not provided any options!');
     } else if (typeof options.symbol === 'undefined') {
       throw new Error('No `symbol` option specified!');
-    } else if (typeof options.interval === 'undefined' ||
-               stocks.INTERVALS.indexOf(options.interval) === -1) {
-      throw new Error(
-        `No 'interval' option specified, please set to any of the following:` +
-         stocks.INTERVALS.join(', ')
-      );
-    } else if (typeof options.start !== 'undefined' &&
-               typeof options.amount !== 'undefined') {
-      throw new Error(`Only 'start'-'end' OR 'amount' can be specified!`);
+    } else if (typeof options.interval === 'undefined' || stocks.INTERVALS.indexOf(options.interval) === -1) {
+      throw new Error('No \'interval\' option specified, please set to any of the following:' + stocks.INTERVALS.join(', '));
+    } else if (typeof options.start !== 'undefined' && typeof options.amount !== 'undefined') {
+      throw new Error('Only \'start\'-\'end\' OR \'amount\' can be specified!');
     }
 
-    if (typeof options.amount === 'undefined' &&
-        options.start === 'undefined') {
-      console.warn(
-        `No 'amount' option specified, returning maximum amount of datapoints`
-      );
+    if (typeof options.amount === 'undefined' && options.start === 'undefined') {
+      console.warn('No \'amount\' option specified, returning maximum amount of datapoints');
     }
 
     if (type === 'technical') {
       if (typeof options.indicator === 'undefined') {
-        throw new Error(`No 'indicator' option specified!`);
+        throw new Error('No \'indicator\' option specified!');
       } else if (typeof options.time_period === 'undefined') {
-        throw new Error(`No 'time_period' option specified!`);
+        throw new Error('No \'time_period\' option specified!');
       }
     }
   },
 
-  _convertData: function (data, amount) {
+  _convertData: function _convertData(data, amount) {
     // Strip meta data
     var keys = Object.keys(data);
     for (var i = 0; i < keys.length; i++) {
-      if (keys[i].indexOf('Time Series') !== -1 ||
-          keys[i].indexOf('Technical') !== -1) {
+      if (keys[i].indexOf('Time Series') !== -1 || keys[i].indexOf('Technical') !== -1) {
         data = data[keys[i]];
         break;
       }
@@ -209,17 +210,17 @@ var stocks = {
     for (i = 0; i < keys.length; i++) {
       if (typeof amount !== 'undefined' && i === amount) break;
 
-      let key = keys[i];
+      var key = keys[i];
 
       // Convert date to local time (dates from AV should be EST)
-      let date = new Date(key + ' EDT');
+      var date = new Date(key + ' EDT');
 
       // Smoothen up the keys and values in each sample
-      let newSample = {};
-      let sampleKeys = Object.keys(data[key]);
+      var newSample = {};
+      var sampleKeys = Object.keys(data[key]);
       for (var j = 0; j < sampleKeys.length; j++) {
-        let sampleKey = sampleKeys[j];
-        let newSampleKey = sampleKey.replace(/.+. /, '');
+        var sampleKey = sampleKeys[j];
+        var newSampleKey = sampleKey.replace(/.+. /, '');
         newSample[newSampleKey] = Number(data[key][sampleKey]);
       }
 
@@ -232,11 +233,11 @@ var stocks = {
     return newData;
   },
 
-  _getBetween: function (data, start, end) {
+  _getBetween: function _getBetween(data, start, end) {
     // Can be optimized by calculating index of start and end dates in list
     var newData = [];
     for (var i = 0; i < data.length; i++) {
-      let sample = data[i];
+      var sample = data[i];
 
       if (start <= sample.date && sample.date <= end) {
         newData.push(sample);
@@ -247,51 +248,103 @@ var stocks = {
   },
 
   /** Public functions */
-  timeSeries: async function (options) {
-    stocks._checkOptions(options, 'timeseries');
+  timeSeries: function () {
+    var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(options) {
+      var symbol, start, end, amount, _interval, params, result, converted;
 
-    if (stocks.INTERVALS.slice(0, 5).indexOf(options.interval) > -1) {
-      var interval = options.interval;
-      options.interval = 'intraday';
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              stocks._checkOptions(options, 'timeseries');
+              symbol = options.symbol, start = options.start, end = options.end, amount = options.amount;
+
+
+              if (stocks.INTERVALS.slice(0, 5).indexOf(options.interval) > -1) {
+                _interval = options.interval;
+
+                options.interval = 'intraday';
+              }
+
+              params = {
+                function: 'TIME_SERIES_' + options.interval,
+                symbol: symbol,
+                outputsize: "full"
+              };
+
+
+              if (options.interval === 'intraday') {
+                params[interval] += interval;
+              }
+
+              // Get result
+              _context.next = 7;
+              return stocks._doRequest(params);
+
+            case 7:
+              result = _context.sent;
+              converted = stocks._convertData(result, amount);
+
+
+              if (typeof start !== 'undefined') {
+                converted = stocks._getBetween(converted, start, end);
+              }
+
+              return _context.abrupt('return', converted);
+
+            case 11:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    function timeSeries(_x) {
+      return _ref.apply(this, arguments);
     }
 
-    // Construct request
-    var url = stocks.DEFAULT_URL;
-    url += `function=TIME_SERIES_${options.interval}&`;
-    url += `symbol=${options.symbol}&`;
-    url += 'outputsize=full&';
-    url += `apikey=${stocks.API_KEY}`;
+    return timeSeries;
+  }(),
 
-    if (options.interval === 'intraday') {
-      url += `&interval=${interval}`;
+  technicalIndicator: function () {
+    var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(options) {
+      var indicator, symbol, interval, time_period, amount, params, result;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              stocks._checkOptions(options, 'technical');
+              indicator = options.indicator, symbol = options.symbol, interval = options.interval, time_period = options.time_period, amount = options.amount;
+              params = {
+                function: indicator,
+                symbol: symbol,
+                interval: interval,
+                time_period: time_period
+
+                // Get result
+              };
+              _context2.next = 5;
+              return stocks._doRequest(params);
+
+            case 5:
+              result = _context2.sent;
+              return _context2.abrupt('return', stocks._convertData(result, options.amount));
+
+            case 7:
+            case 'end':
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    function technicalIndicator(_x2) {
+      return _ref2.apply(this, arguments);
     }
 
-    // Get result
-    var result = await stocks._doRequest(url);
-    var converted = stocks._convertData(result, options.amount);
-
-    if (typeof options.start !== 'undefined') {
-      converted = stocks._getBetween(converted, options.start, options.end);
-    }
-
-    return converted;
-  },
-
-  technicalIndicator: async function (options) {
-    stocks._checkOptions(options, 'technical');
-
-    // Construct request
-    var url = stocks.DEFAULT_URL;
-    url += `function=${options.indicator}&`;
-    url += `symbol=${options.symbol}&`;
-    url += `interval=${options.interval}&`;
-    url += `time_period=${options.time_period}&`;
-    url += `apikey=${stocks.API_KEY}`;
-
-    // Get result
-    var result = await stocks._doRequest(url);
-    return stocks._convertData(result, options.amount);
-  }
+    return technicalIndicator;
+  }()
 };
 
 /** Export */
@@ -300,7 +353,6 @@ if (typeof module !== 'undefined' && module.exports) {
 } else {
   window['stocks'] = stocks; // Browser
 }
-
 
 /***/ }),
 /* 1 */
