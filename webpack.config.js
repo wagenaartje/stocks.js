@@ -10,7 +10,6 @@ var data = {
     path: __dirname,
     filename: '[name].js',
     library: 'stocks',
-    libraryTarget: 'umd'
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
@@ -18,7 +17,16 @@ var data = {
   ],
   externals: {
     xmlhttprequest: 'XMLHttpRequest'
-  }
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js?$/,
+        exclude: /node_modules/,
+        use: [ { loader: 'babel-loader' } ]
+      }
+    ]
+  },
 };
 
 module.exports = data;
