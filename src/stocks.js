@@ -243,7 +243,9 @@ var stocks = {
 
 /** Export */
 if (typeof module !== 'undefined' && module.exports) {
+  const Stock = require('./Stock.js').default;
   module.exports = stocks; // Node.js
+  module.exports = {Stock};
 } else {
   window['stocks'] = stocks; // Browser
 }
