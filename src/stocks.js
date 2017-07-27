@@ -1,7 +1,10 @@
 /** Import */
+var fetch;
 if (typeof window === 'undefined') {
   // Seems like we are using Node.js
-  var NodeXMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+  fetch = require('node-fetch');
+} else {
+  fetch = window.fetch;
 }
 
 /*******************************************************************************
@@ -43,34 +46,23 @@ var stocks = {
     }
 
     return new Promise((resolve, reject) => {
-      var request = typeof window !== 'undefined'
-        ? new XMLHttpRequest() : new NodeXMLHttpRequest();
       var url = stocks._createUrl(params);
-      request.open('GET', url, true);
 
-      request.onload = function (e) {
-        if (request.readyState === 4) {
-          if (request.status === 200) {
-            var result = JSON.parse(request.responseText);
-            if (typeof result['Error Message'] !== 'undefined') {
-              throw new Error(
-                'An error occured. Please create an issue at ' +
-                'https://github.com/wagenaartje/stocks/issues with your code, ' +
-                `and provide the following message: ${result['Error Message']}`
-              );
-            }
+      fetch(url).then(function (result) {
+        return result.text();
+      }).then(function (body) {
+        var response = JSON.parse(body);
 
-            resolve(result);
-          } else {
-            reject(e);
-          }
+        if (typeof response['Error Message'] !== 'undefined') {
+          throw new Error(
+            'An error occured. Please create an issue at ' +
+            'https://github.com/wagenaartje/stocks/issues with your code, ' +
+            `and provide the following message: ${response['Error Message']}`
+          );
         }
-      };
-      request.onerror = function (e) {
-        reject(e);
-      };
 
-      request.send(null);
+        resolve(response);
+      });
     });
   },
 
@@ -119,7 +111,7 @@ var stocks = {
     var newData = [];
 
     // Process all elements
-    for (var key in data) {
+    for (key in data) {
       if (typeof amount !== 'undefined' && newData.length === amount) break;
 
       // Convert date to local time (dates from AV should be EST)

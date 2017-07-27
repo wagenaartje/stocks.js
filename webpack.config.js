@@ -16,9 +16,9 @@ var data = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.BannerPlugin(license())
   ],
-  externals: {
-    xmlhttprequest: 'xmlhttprequest'
-  }
+  externals: [
+    'node-fetch'
+  ]
 };
 
 module.exports = data;

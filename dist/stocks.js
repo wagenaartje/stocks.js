@@ -24,13 +24,13 @@
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("xmlhttprequest"));
+		module.exports = factory(require("node-fetch"));
 	else if(typeof define === 'function' && define.amd)
-		define(["xmlhttprequest"], factory);
+		define(["node-fetch"], factory);
 	else if(typeof exports === 'object')
-		exports["stocks"] = factory(require("xmlhttprequest"));
+		exports["stocks"] = factory(require("node-fetch"));
 	else
-		root["stocks"] = factory(root["xmlhttprequest"]);
+		root["stocks"] = factory(root["node-fetch"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -102,9 +102,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 /** Import */
+var fetch;
 if (typeof window === 'undefined') {
   // Seems like we are using Node.js
-  var NodeXMLHttpRequest = __webpack_require__(1).XMLHttpRequest;
+  fetch = __webpack_require__(1);
+} else {
+  fetch = window.fetch;
 }
 
 /*******************************************************************************
@@ -146,34 +149,23 @@ var stocks = {
     }
 
     return new Promise((resolve, reject) => {
-      var request = typeof window !== 'undefined'
-        ? new XMLHttpRequest() : new NodeXMLHttpRequest();
       var url = stocks._createUrl(params);
-      request.open('GET', url, true);
 
-      request.onload = function (e) {
-        if (request.readyState === 4) {
-          if (request.status === 200) {
-            var result = JSON.parse(request.responseText);
-            if (typeof result['Error Message'] !== 'undefined') {
-              throw new Error(
-                'An error occured. Please create an issue at ' +
-                'https://github.com/wagenaartje/stocks/issues with your code, ' +
-                `and provide the following message: ${result['Error Message']}`
-              );
-            }
+      fetch(url).then(function (result) {
+        return result.text();
+      }).then(function (body) {
+        var response = JSON.parse(body);
 
-            resolve(result);
-          } else {
-            reject(e);
-          }
+        if (typeof response['Error Message'] !== 'undefined') {
+          throw new Error(
+            'An error occured. Please create an issue at ' +
+            'https://github.com/wagenaartje/stocks/issues with your code, ' +
+            `and provide the following message: ${response['Error Message']}`
+          );
         }
-      };
-      request.onerror = function (e) {
-        reject(e);
-      };
 
-      request.send(null);
+        resolve(response);
+      });
     });
   },
 
@@ -222,7 +214,7 @@ var stocks = {
     var newData = [];
 
     // Process all elements
-    for (var key in data) {
+    for (key in data) {
       if (typeof amount !== 'undefined' && newData.length === amount) break;
 
       // Convert date to local time (dates from AV should be EST)
