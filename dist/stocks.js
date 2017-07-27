@@ -130,10 +130,10 @@ var stocks = {
     }
 
     var url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
-    var keys = Object.keys(params);
-    keys.forEach(function (key) {
-        url += `${key}=${params[key]}&`;
-    });
+
+    for (var key in params) {
+      url += `${key}=${params[key]}&`;
+    }
 
     return url;
   },
@@ -211,11 +211,10 @@ var stocks = {
 
   _convertData: function (data, amount) {
     // Strip meta data
-    var keys = Object.keys(data);
-    for (var i = 0; i < keys.length; i++) {
-      if (keys[i].indexOf('Time Series') !== -1 ||
-          keys[i].indexOf('Technical') !== -1) {
-        data = data[keys[i]];
+    for (var key in data) {
+      if (key.indexOf('Time Series') !== -1 ||
+          key.indexOf('Technical') !== -1) {
+        data = data[key];
         break;
       }
     }
@@ -223,11 +222,8 @@ var stocks = {
     var newData = [];
 
     // Process all elements
-    keys = Object.keys(data);
-    for (i = 0; i < keys.length; i++) {
-      if (typeof amount !== 'undefined' && i === amount) break;
-
-      let key = keys[i];
+    for (var key in data) {
+      if (typeof amount !== 'undefined' && newData.length === amount) break;
 
       // Convert date to local time (dates from AV should be EST)
       let date = new Date(key + ' EDT');
@@ -280,7 +276,7 @@ var stocks = {
     };
 
     if (options.interval === 'intraday') {
-      params[interval] += interval;
+      params.interval = interval;
     }
 
     // Get result
@@ -328,13 +324,11 @@ var stocks = {
     };
 
     var result = await stocks._doRequest(params);
-    var keys = Object.keys(result);
 
-    for (var i = 0; i < keys.length; i++) {
-      let key = keys[i];
-      key = key.replace(/ /g, '').toLowerCase();
-      if (key.indexOf(options.timespan) !== -1) {
-        result = result[keys[i]];
+    for (var key in result) {
+      let noSpace = key.replace(/ /g, '').toLowerCase();
+      if (noSpace.indexOf(options.timespan) !== -1) {
+        result = result[key];
         for (var j in result) {
           result[j] = Number(result[j].replace('%', ''));
         }
