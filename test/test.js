@@ -107,7 +107,7 @@ function technicalIndicatorAmount (i) {
       interval: stocks.INTERVALS[i],
       indicator: indicator,
       amount: amount,
-      time_period: Math.ceil(Math.random() * 10)
+      time_period: Math.ceil(Math.random() * 10) + 1
     });
 
     // Check if the actual amount is given
@@ -130,7 +130,7 @@ function technicalIndicatorDates (start, end, i) {
       indicator: indicator,
       start: start,
       end: end,
-      time_period: Math.ceil(Math.random() * 10)
+      time_period: Math.ceil(Math.random() * 10) + 1
     });
 
     // Check if all dates are between start an end
