@@ -24,13 +24,13 @@
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("XMLHttpRequest"));
+		module.exports = factory(require("xmlhttprequest"));
 	else if(typeof define === 'function' && define.amd)
-		define(["XMLHttpRequest"], factory);
+		define(["xmlhttprequest"], factory);
 	else if(typeof exports === 'object')
-		exports["stocks"] = factory(require("XMLHttpRequest"));
+		exports["stocks"] = factory(require("xmlhttprequest"));
 	else
-		root["stocks"] = factory(root["XMLHttpRequest"]);
+		root["stocks"] = factory(root["xmlhttprequest"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

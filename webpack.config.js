@@ -17,7 +17,7 @@ var data = {
     new webpack.BannerPlugin(license())
   ],
   externals: {
-    xmlhttprequest: 'XMLHttpRequest'
+    xmlhttprequest: 'xmlhttprequest'
   }
 };
 
