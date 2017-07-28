@@ -74,15 +74,15 @@ API Key [here](https://www.alphavantage.co/support/#api-key). Now in another
 `.js` file, write the following code:
 
 ```js
-stocks.API_KEY = 'XXXX'; // replace XXXX with your API Key
+var stocks = new Stocks('XXXX'); // replace XXXX with your API Key
 ```
 
 Basically, you're good to go! You can use any of the functions without a hassle
 now. View the *Usage* paragraph below to see how you can fetch data.
 
-
 ## Usage
-At this moment, stocks.js supports 3 stock market data functions.
+At this moment, stocks.js supports 3 stock market data functions. Be sure to
+read through the 'Getting Started' section before reading this!
 
 ### stocks.timeSeries()
 This function allows you to retrieve data from now, up to 20 years to the past.

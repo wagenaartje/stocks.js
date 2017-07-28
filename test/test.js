@@ -1,5 +1,5 @@
 /* Import */
-var stocks = require('../dist/stocks');
+var Stocks = require('../dist/stocks');
 var chai = require('chai');
 chai.use(require('chai-datetime'));
 
@@ -10,7 +10,8 @@ var expect = chai.expect;
 /* Set up some variables */
 var symbols = ['TSLA', 'MSFT', 'AAPL', 'AEG', 'FB']; // must be listed >5 years
 var indicators = ['ADX', 'BOP', 'CCI', 'DX', 'PLUS_DI', 'MIDPRICE', 'TRANGE'];
-stocks.API_KEY = 'SYTCQBUIU44BX2G4';
+
+var stocks = new Stocks('SYTCQBUIU44BX2G4');
 
 /* Run the tests (split with http://goo.gl/enN7P) */
 describe('Stocks.js', function () {

@@ -11,7 +11,11 @@ if (typeof window === 'undefined') {
                                   STOCKS
 *******************************************************************************/
 
-var stocks = {
+function Stocks (apiKey) {
+  this.apiKey = apiKey;
+}
+
+Stocks.prototype = {
   /** Constants */
   DEFAULT_URL: 'https://www.alphavantage.co/query?',
   API_KEY_URL: 'https://www.alphavantage.co/support/#api-key',
@@ -29,7 +33,7 @@ var stocks = {
       throw new Error(`Params is undefined`);
     }
 
-    var url = `${stocks.DEFAULT_URL}apikey=${stocks.API_KEY}&`;
+    var url = `${this.DEFAULT_URL}apikey=${this.apiKey}&`;
 
     for (var key in params) {
       url += `${key}=${params[key]}&`;
@@ -39,14 +43,14 @@ var stocks = {
   },
 
   _doRequest: function (params) {
-    if (typeof stocks.API_KEY === 'undefined') {
+    if (typeof this.apiKey === 'undefined') {
       throw new Error(
-        `You must first claim your API Key at ${stocks.API_KEY_URL}`
+        `You must first claim your API Key at ${this.API_KEY_URL}`
       );
     }
 
     return new Promise((resolve, reject) => {
-      var url = stocks._createUrl(params);
+      var url = this._createUrl(params);
 
       fetch(url).then(function (result) {
         return result.text();
@@ -72,10 +76,10 @@ var stocks = {
     } else if (typeof options.symbol === 'undefined') {
       throw new Error('No `symbol` option specified!');
     } else if (typeof options.interval === 'undefined' ||
-               stocks.INTERVALS.indexOf(options.interval) === -1) {
+               this.INTERVALS.indexOf(options.interval) === -1) {
       throw new Error(
         `No (correct) 'interval' option specified, please set to any of the ` +
-        `following: ${stocks.INTERVALS.join(', ')}`
+        `following: ${this.INTERVALS.join(', ')}`
       );
     } else if (typeof options.start !== 'undefined' &&
                typeof options.amount !== 'undefined') {
@@ -151,9 +155,9 @@ var stocks = {
 
   /** Public functions */
   timeSeries: async function (options = {}) {
-    stocks._checkOptions(options, 'timeseries');
+    this._checkOptions(options, 'timeseries');
 
-    if (stocks.INTERVALS.slice(0, 5).indexOf(options.interval) > -1) {
+    if (this.INTERVALS.slice(0, 5).indexOf(options.interval) > -1) {
       var interval = options.interval;
       options.interval = 'intraday';
     }
@@ -169,18 +173,18 @@ var stocks = {
     }
 
     // Get result
-    var result = await stocks._doRequest(params);
-    var converted = stocks._convertData(result, options.amount);
+    var result = await this._doRequest(params);
+    var converted = this._convertData(result, options.amount);
 
     if (typeof options.start !== 'undefined') {
-      converted = stocks._getBetween(converted, options.start, options.end);
+      converted = this._getBetween(converted, options.start, options.end);
     }
 
     return converted;
   },
 
   technicalIndicator: async function (options = {}) {
-    stocks._checkOptions(options, 'technical');
+    this._checkOptions(options, 'technical');
 
     var params = {
       function: options.indicator,
@@ -190,11 +194,11 @@ var stocks = {
     };
 
     // Get result
-    var result = await stocks._doRequest(params);
-    var converted = stocks._convertData(result, options.amount);
+    var result = await this._doRequest(params);
+    var converted = this._convertData(result, options.amount);
 
     if (typeof options.start !== 'undefined') {
-      converted = stocks._getBetween(converted, options.start, options.end);
+      converted = this._getBetween(converted, options.start, options.end);
     }
 
     return converted;
@@ -202,9 +206,9 @@ var stocks = {
 
   sectorPerformance: async function (options = {}) {
     if (typeof options.timespan === 'undefined' ||
-               stocks.PERFORMANCES.indexOf(options.timespan) === -1) {
+               this.PERFORMANCES.indexOf(options.timespan) === -1) {
       throw new Error(`No (correct) 'interval' option specified, please set ` +
-        `to any ofthe following: ${stocks.PERFORMANCES.join(', ')}`
+        `to any ofthe following: ${this.PERFORMANCES.join(', ')}`
       );
     }
 
@@ -212,7 +216,7 @@ var stocks = {
       function: 'SECTOR'
     };
 
-    var result = await stocks._doRequest(params);
+    var result = await this._doRequest(params);
 
     for (var key in result) {
       let noSpace = key.replace(/ /g, '').toLowerCase();
@@ -228,8 +232,8 @@ var stocks = {
 };
 
 /** Export */
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = stocks; // Node.js
+if (typeof window === 'undefined') {
+  module.exports = Stocks; // Node.js
 } else {
-  window['stocks'] = stocks; // Browser
+  window['Stocks'] = Stocks; // Browser
 }
