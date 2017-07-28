@@ -26,7 +26,7 @@ please report them at the [issues](https://github.com/wagenaartje/stocks.js/issu
 section.
 
 This is an example of regular stock time series retrieval
-([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/)):
+([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/4/)):
 
 
 ```js
@@ -40,7 +40,7 @@ var result = await stocks.timeSeries({
 
 And this is an example of how to retrieve a [technical
 indicator](https://www.alphavantage.co/documentation/#technical-indicators)
-([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/3/)):
+([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/5/)):
 
 ```js
 // Let's get the directional movement index of Microsoft Corporation for the
@@ -117,7 +117,7 @@ var options = {
 };
 ```
 
-Or to get data in between two dates ([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/2/)):
+Or to get data in between two dates ([click to run](https://jsfiddle.net/wagenaartje/2pph8rax/6/)):
 
 ```js
 var options = {
@@ -216,7 +216,7 @@ from any of the following timespans: 'real-time', '1day', '5day', '1month',
 '3month', 'year-to-date', '1year', '3year', '5year', '10year'
 
 So an example of options could be
-([click to run](https://jsfiddle.net/wagenaartje/up4nnr4a/1/)):
+([click to run](https://jsfiddle.net/wagenaartje/up4nnr4a/2/)):
 
 ```js
 var options = {
