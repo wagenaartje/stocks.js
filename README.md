@@ -99,8 +99,8 @@ is 'TLSA'. There is no list of symbols, I have requested a list at Alpha
 Vantage.
 * `REQ interval`, the interval of the data points you want to retrieve. Choose
 from any of the following intervals: '1min', '5min', '15min', '30min', '60min',
-'daily', 'weekly' and 'monthly'. Any interval shorter than daily will only fetch
-the data points of the current day.
+'daily', 'weekly' and 'monthly'. Intervals 1min-60min typically span back to the
+past 10 to 15 active trading days. Intervals daily-monthly span up to 20 years.
 * `amount`, the amount of data points to fetch. If not specified, will return
 all possible data points up to a maximum twenty years ago.
 * `start & end`, the start and end dates from which to get data from in between.
