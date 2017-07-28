@@ -275,6 +275,10 @@ Stocks.prototype = {
       params.interval = interval;
     }
 
+    if (this.INTERVALS.indexOf(options.interval) <= 5 && options.amount <= 100) {
+      params.outputsize = 'compact';
+    }
+
     // Get result
     var result = await this._doRequest(params);
     var converted = this._convertData(result, options.amount);
