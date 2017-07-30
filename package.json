@@ -1,6 +1,6 @@
 {
   "name": "stocks.js",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "stocks.js offers an easy to use stock market data API",
   "homepage" : "https://github.com/wagenaartje/stocks.js",
   "main": "./dist/stocks",
