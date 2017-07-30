@@ -29,10 +29,6 @@ Stocks.prototype = {
 
   /** Private functions */
   _createUrl: function (params) {
-    if (!params) {
-      throw new Error(`Params is undefined`);
-    }
-
     params.apikey = this.apiKey;
 
     var encoded = Object.keys(params).map(
@@ -70,7 +66,7 @@ Stocks.prototype = {
 
   _checkOptions: function (options, type) {
     if (typeof options === 'undefined') {
-      throw new Error();
+      throw new Error('No options specified!');
     } else if (typeof options.symbol === 'undefined') {
       throw new Error('No `symbol` option specified!');
     } else if (typeof options.interval === 'undefined' ||
