@@ -33,13 +33,13 @@ Stocks.prototype = {
       throw new Error(`Params is undefined`);
     }
 
-    var url = `${this.DEFAULT_URL}apikey=${this.apiKey}&`;
+    params.apikey = this.apiKey;
 
-    for (var key in params) {
-      url += `${key}=${params[key]}&`;
-    }
+    var encoded = Object.keys(params).map(
+      key => `${key}=${params[key]}`
+    ).join('&');
 
-    return url;
+    return this.DEFAULT_URL + encoded;
   },
 
   _doRequest: function (params) {
@@ -52,27 +52,25 @@ Stocks.prototype = {
     return new Promise((resolve, reject) => {
       var url = this._createUrl(params);
 
-      fetch(url).then(function (result) {
-        return result.text();
-      }).then(function (body) {
-        var response = JSON.parse(body);
-
-        if (typeof response['Error Message'] !== 'undefined') {
+      fetch(url).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        if (typeof data['Error Message'] !== 'undefined') {
           throw new Error(
             'An error occured. Please create an issue at ' +
             'https://github.com/wagenaartje/stocks/issues with your code, ' +
-            `and provide the following message: ${response['Error Message']}`
+            `and provide the following message: ${data['Error Message']}`
           );
         }
 
-        resolve(response);
+        resolve(data);
       });
     });
   },
 
   _checkOptions: function (options, type) {
     if (typeof options === 'undefined') {
-      throw new Error('You have not provided any options!');
+      throw new Error();
     } else if (typeof options.symbol === 'undefined') {
       throw new Error('No `symbol` option specified!');
     } else if (typeof options.interval === 'undefined' ||
@@ -123,9 +121,7 @@ Stocks.prototype = {
 
       // Smoothen up the keys and values in each sample
       let newSample = {};
-      let sampleKeys = Object.keys(data[key]);
-      for (var j = 0; j < sampleKeys.length; j++) {
-        let sampleKey = sampleKeys[j];
+      for (var sampleKey in data[key]) {
         let newSampleKey = sampleKey.replace(/.+. /, '');
         newSample[newSampleKey] = Number(data[key][sampleKey]);
       }
@@ -212,7 +208,7 @@ Stocks.prototype = {
     if (typeof options.timespan === 'undefined' ||
                this.PERFORMANCES.indexOf(options.timespan) === -1) {
       throw new Error(`No (correct) 'interval' option specified, please set ` +
-        `to any ofthe following: ${this.PERFORMANCES.join(', ')}`
+        `to any of the following: ${this.PERFORMANCES.join(', ')}`
       );
     }
 
@@ -222,16 +218,17 @@ Stocks.prototype = {
 
     var result = await this._doRequest(params);
 
-    for (var key in result) {
+    var found = Object.keys(result).find(key => {
       let noSpace = key.replace(/ /g, '').toLowerCase();
-      if (noSpace.indexOf(options.timespan) !== -1) {
-        result = result[key];
-        for (var j in result) {
-          result[j] = Number(result[j].replace('%', ''));
-        }
-        return result;
-      }
+      return noSpace.indexOf(options.timespan) !== -1;
+    });
+
+    result = result[found];
+    for (var j in result) {
+      result[j] = parseFloat(result[j]);
     }
+
+    return result;
   }
 };
 
