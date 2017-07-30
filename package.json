@@ -1,8 +1,9 @@
 {
   "name": "stocks.js",
   "version": "0.0.11",
-  "description": "stocks.js offers an easy to use stock market data retrieval API",
-  "main": "./src/stocks",
+  "description": "stocks.js offers an easy to use stock market data API",
+  "homepage" : "https://github.com/wagenaartje/stocks.js",
+  "main": "./dist/stocks",
   "scripts": {
     "build": "webpack",
     "test": "mocha test",
@@ -30,7 +31,8 @@
   ],
   "author": {
     "name": "Thomas Wagenaar",
-    "email": "wagenaartje@protonmail.com"
+    "email": "wagenaartje@protonmail.com",
+    "url": "https://wagenaartje.github.io/"
   },
   "license": "MIT",
   "bugs": {
