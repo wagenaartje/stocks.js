@@ -98,22 +98,16 @@ Stocks.prototype = {
 
   _convertData: function (data, amount) {
     // Strip meta data
-    for (var key in data) {
-      if (key.indexOf('Time Series') !== -1 ||
-          key.indexOf('Technical') !== -1) {
-        data = data[key];
-        break;
-      }
-    }
+    var key = Object.keys(data).find(
+      key => key.indexOf('Time Series') !== -1 || key.indexOf('Technical') !== -1
+    );
+    data = data[key];
 
     var newData = [];
 
     // Process all elements
     for (key in data) {
       if (typeof amount !== 'undefined' && newData.length === amount) break;
-
-      // Convert date to local time (dates from AV should be EST)
-      let date = new Date(key + ' EDT');
 
       // Smoothen up the keys and values in each sample
       let newSample = {};
@@ -122,7 +116,8 @@ Stocks.prototype = {
         newSample[newSampleKey] = Number(data[key][sampleKey]);
       }
 
-      newSample['date'] = date;
+      // Convert date to local time (dates from AV should be EDT)
+      newSample['date'] = new Date(key + ' EDT');
 
       // Insert in new data
       newData.push(newSample);
@@ -133,16 +128,7 @@ Stocks.prototype = {
 
   _getBetween: function (data, start, end) {
     // Can be optimized by calculating index of start and end dates in list
-    var newData = [];
-    for (var i = 0; i < data.length; i++) {
-      let sample = data[i];
-
-      if (start <= sample.date && sample.date <= end) {
-        newData.push(sample);
-      }
-    }
-
-    return newData;
+    return data.filter(sample => start <= sample.date && sample.date <= end);
   },
 
   /** Public functions */
