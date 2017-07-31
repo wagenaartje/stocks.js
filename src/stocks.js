@@ -60,28 +60,10 @@ Stocks.prototype = {
   },
 
   _throw: function (code, type) {
-    const MESSAGES = {
-      0: `You must first claim your API Key at ${this.API_KEY_URL}`,
-      1: 'No options specified!',
-      2: 'No `symbol` option specified!',
-      3: `No (correct) 'interval' option specified, please set to any of the ` +
-         `following: ${this.INTERVALS.join(', ')}`,
-      4: `Only 'start'-'end' OR 'amount' can be specified!`,
-      5: `No 'indicator' option specified!`,
-      6: `No 'time_period' option specified!`,
-      7: `No (correct) 'interval' option specified, please set to any of the ` +
-         `following: ${this.PERFORMANCES.join(', ')}`,
-      8: `No 'amount' option specified, returning maximum amount of datapoints`,
-      9: 'An error occured during the API request. Please create an issue at ' +
-         'https://github.com/wagenaartje/stocks/issues with your code',
-      10: `'start' specified, but 'end' not specified. Using today's date as ` +
-          `end date!`
-    };
-
     if (type === 'error') {
-      throw new Error(`${code}: ${MESSAGES[code]}`);
+      throw new Error(`${code}: ${this.MESSAGES[code]}`);
     } else if (type === 'warning') {
-      console.warn(`${code}: ${MESSAGES[code]}`);
+      console.warn(`${code}: ${this.MESSAGES[code]}`);
     }
   },
 
@@ -233,6 +215,24 @@ Stocks.prototype = {
 
     return result;
   }
+};
+
+Stocks.prototype.MESSAGES = {
+  0: `You must first claim your API Key at ${Stocks.prototype.API_KEY_URL}`,
+  1: 'No options specified!',
+  2: 'No `symbol` option specified!',
+  3: `No (correct) 'interval' option specified, please set to any of the ` +
+     `following: ${Stocks.prototype.INTERVALS.join(', ')}`,
+  4: `Only 'start'-'end' OR 'amount' can be specified!`,
+  5: `No 'indicator' option specified!`,
+  6: `No 'time_period' option specified!`,
+  7: `No (correct) 'interval' option specified, please set to any of the ` +
+     `following: ${Stocks.prototype.PERFORMANCES.join(', ')}`,
+  8: `No 'amount' option specified, returning maximum amount of datapoints`,
+  9: 'An error occured during the API request. Please create an issue at ' +
+     'https://github.com/wagenaartje/stocks/issues with your code',
+  10: `'start' specified, but 'end' not specified. Using today's date as ` +
+      `end date!`
 };
 
 /** Export */
