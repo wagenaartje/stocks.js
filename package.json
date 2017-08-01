@@ -40,6 +40,6 @@
     "email": "wagenaartje@protonmail.com"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=7.6"
   }
 }
