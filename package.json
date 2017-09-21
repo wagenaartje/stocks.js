@@ -2,7 +2,7 @@
   "name": "stocks.js",
   "version": "0.0.17",
   "description": "stocks.js offers an easy to use stock market data API",
-  "homepage" : "https://github.com/wagenaartje/stocks.js",
+  "homepage": "https://github.com/wagenaartje/stocks.js",
   "main": "./dist/stocks",
   "scripts": {
     "build": "webpack",
