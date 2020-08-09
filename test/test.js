@@ -119,7 +119,7 @@ function technicalIndicatorAmount (i) {
     assert.equal(amount, result.length, 'Output length incorrect');
 
     // Check if the first element has all values
-    expect(result[0]).to.have.all.keys('date');
+    expect(result[0]).to.have.any.keys('date');
   });
 }
 
@@ -149,7 +149,7 @@ function technicalIndicatorDates (start, end, i) {
     }
 
     // Check if the first element has all values
-    expect(result[0]).to.have.all.keys('date');
+    expect(result[0]).to.have.any.keys('date');
   });
 }
 
