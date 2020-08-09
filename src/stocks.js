@@ -96,6 +96,8 @@ Stocks.prototype = {
         this._throw(5, 'error');
       } else if (typeof options.time_period === 'undefined') {
         this._throw(6, 'error');
+      } else if (typeof options.series_type === 'undefined') {
+        this._throw(11, 'error');
       }
     }
   },
@@ -179,7 +181,8 @@ Stocks.prototype = {
       function: options.indicator,
       symbol: options.symbol,
       interval: options.interval,
-      time_period: options.time_period
+      time_period: options.time_period,
+      series_type: options.series_type,
     };
 
     // Get result
@@ -234,7 +237,8 @@ Stocks.prototype.MESSAGES = {
   9: 'An error occured during the API request. Please create an issue at ' +
      'https://github.com/wagenaartje/stocks/issues with your code',
   10: `'start' specified, but 'end' not specified. Using today's date as ` +
-      `end date!`
+      `end date!`,
+  11: `No 'series_type' option specified`,
 };
 
 /** Export */
