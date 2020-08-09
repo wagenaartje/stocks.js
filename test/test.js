@@ -48,7 +48,7 @@ describe('Stocks.js', function () {
   });
 });
 
-async function timeSeriesAmount (i) {
+function timeSeriesAmount (i) {
   it(stocks.INTERVALS[i], async function () {
     this.timeout(30000);
     await sleep(12000);
