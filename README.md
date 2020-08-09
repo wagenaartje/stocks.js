@@ -150,25 +150,8 @@ where *options* is an object containing any of the following options:
 * `REQ symbol`, the symbol of the stock you want to follow. An example of this
 is 'TLSA'. There is no list of symbols, I have requested a list at Alpha
 Vantage.
-* `REQ indicator`, the indicator of which you want to fetch data. Currently,
-only a handful of indicators are supported. Way more will follow soon. Supported
-indicators: [ADX](https://www.alphavantage.co/documentation/#adx),
-[ADXR](https://www.alphavantage.co/documentation/#adxr),
-[BOP](https://www.alphavantage.co/documentation/#bop),
-[CCI](https://www.alphavantage.co/documentation/#cci),
-[AROON](https://www.alphavantage.co/documentation/#aroon),
-[AROONOSC](https://www.alphavantage.co/documentation/#aroonosc),
-[MFI](https://www.alphavantage.co/documentation/#mfi),
-[DX](https://www.alphavantage.co/documentation/#dx),
-[MINUS_DI](https://www.alphavantage.co/documentation/#minusdi),
-[PLUS_DI](https://www.alphavantage.co/documentation/#plusdi),
-[PLUS_DM](https://www.alphavantage.co/documentation/#plusdm),
-[MIDPRICE](https://www.alphavantage.co/documentation/#midprice),
-[TRANGE](https://www.alphavantage.co/documentation/#trange),
-[ATR](https://www.alphavantage.co/documentation/#atr),
-[NATR](https://www.alphavantage.co/documentation/#natr),
-[AD](https://www.alphavantage.co/documentation/#ad) and
-[OBV](https://www.alphavantage.co/documentation/#obv)
+* `REQ indicator`, the indicator of which you want to fetch data. The list of
+indicators can be found [here](https://www.alphavantage.co/documentation/#technical-indicators).
 * `REQ interval`, the interval of the data points you want to retrieve. Choose
 from any of the following intervals: '1min', '5min', '15min', '30min', '60min',
 'daily', 'weekly' and 'monthly'. Any interval shorter than daily will only fetch
