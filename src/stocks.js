@@ -28,6 +28,23 @@ Stocks.prototype = {
     '3year', '5year', '10year'
   ],
 
+  INDICATORS: [
+    'SMA', 'EMA', 'WMA', 'DEMA', 'TEMA', 'TRIMA', 'KAMA', 'MAMA', 'VWAP', 'T3',
+    'MACD', 'MACDEXT', 'STOCH', 'STOCHF', 'RSI', 'STOCHRSI', 'WILLR', 'ADX',
+    'ADXR', 'APO', 'PPO', 'MOM', 'BOP', 'CCI', 'CMO', 'ROC', 'ROCR', 'AROON',
+    'AROONOSC', 'MFI', 'TRIX', 'ULTOSC', 'DX', 'MINUS_DI', 'PLUS_DI', 'MINUS_DM',
+    'PLUS_DM', 'BBANDS', 'MIDPOINT', 'MIDPRICE', 'SAR', 'TRANGE', 'ATR', 'NATR',
+    'AD', 'ADOSC', 'OBV', 'HT_TRENDLINE', 'HT_SINE', 'HT_TRENDMODE',
+    'HT_DCPERIOD', 'HT_DCPHASE', 'HT_PHASOR'
+  ],
+
+  INDICATORS_ST: [
+    'SMA', 'EMA', 'WMA', 'DEMA', 'TEMA', 'TRIMA', 'KAMA', 'MAMA', 'T3', 'MACD',
+    'MACDEXT', 'RSI', 'STOCHRSI', 'APO', 'PPO', 'MOM', 'CMO', 'ROC', 'ROCR',
+    'TRIX', 'BBANDS', 'MIDPOINT', 'HT_TRENDLINE', 'HT_SINE', 'HT_TRENDMODE',
+    'HT_DCPERIOD', 'HT_DCPHASE', 'HT_PHASOR'
+  ],
+
   /** Private functions */
   _createUrl: function (params) {
     params.apikey = this.apiKey;
@@ -44,6 +61,8 @@ Stocks.prototype = {
       this._throw(0, 'error');
     }
 
+    var self = this;
+
     return new Promise((resolve, reject) => {
       var url = this._createUrl(params);
 
@@ -51,7 +70,7 @@ Stocks.prototype = {
         return response.json();
       }).then(function (data) {
         if (typeof data['Error Message'] !== 'undefined') {
-          this._throw(9, 'error');
+          self._throw(9, 'error');
         }
 
         resolve(data);
@@ -96,6 +115,11 @@ Stocks.prototype = {
         this._throw(5, 'error');
       } else if (typeof options.time_period === 'undefined') {
         this._throw(6, 'error');
+      } else if (!this.INDICATORS.includes(options.indicator)) {
+        this._throw(12, 'error');
+      } else if (typeof options.series_type === 'undefined' &&
+                 this.INDICATORS_ST.includes(options.indicator)) {
+        this._throw(11, 'error');
       }
     }
   },
@@ -179,7 +203,8 @@ Stocks.prototype = {
       function: options.indicator,
       symbol: options.symbol,
       interval: options.interval,
-      time_period: options.time_period
+      time_period: options.time_period,
+      series_type: options.series_type
     };
 
     // Get result
@@ -234,7 +259,10 @@ Stocks.prototype.MESSAGES = {
   9: 'An error occured during the API request. Please create an issue at ' +
      'https://github.com/wagenaartje/stocks/issues with your code',
   10: `'start' specified, but 'end' not specified. Using today's date as ` +
-      `end date!`
+      `end date!`,
+  11: `No 'series_type' option specified`,
+  12: `The indicator specified does not exist. Please check the Alpha Vantage
+       list of indicators https://www.alphavantage.co/documentation/#technical-indicators`
 };
 
 /** Export */

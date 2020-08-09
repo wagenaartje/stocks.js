@@ -181,6 +181,8 @@ all possible data points up to a maximum twenty years ago.
 * `start & end`, the start and end dates from which to get data from in between.
 _Cannot_ be used in combination with the amount option. For any interval shorter
 than daily, specify intraday dates.
+* `series_type`, can be either `close`, `open`, `high` or `low`. Not all
+indicators require this
 
 So an example of options could be:
 

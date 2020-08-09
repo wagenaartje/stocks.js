@@ -104,21 +104,22 @@ function technicalIndicatorAmount (i) {
     await sleep(12000);
 
     var amount = Math.ceil(Math.random() * 60);
-    var indicator = indicators[Math.floor(Math.random() * indicators.length)];
+    var indicator = stocks.INDICATORS[Math.floor(Math.random() * stocks.INDICATORS.length)];
 
     var result = await stocks.technicalIndicator({
       symbol: symbols[Math.floor(Math.random() * symbols.length)],
       interval: stocks.INTERVALS[i],
       indicator: indicator,
       amount: amount,
-      time_period: Math.ceil(Math.random() * 10) + 1
+      time_period: Math.ceil(Math.random() * 10) + 1,
+      series_type: 'close'
     });
 
     // Check if the actual amount is given
     assert.equal(amount, result.length, 'Output length incorrect');
 
     // Check if the first element has all values
-    expect(result[0]).to.have.all.keys(indicator, 'date');
+    expect(result[0]).to.have.all.keys('date');
   });
 }
 
@@ -127,7 +128,7 @@ function technicalIndicatorDates (start, end, i) {
     this.timeout(30000);
     await sleep(12000);
 
-    var indicator = indicators[Math.floor(Math.random() * indicators.length)];
+    var indicator = stocks.INDICATORS[Math.floor(Math.random() * stocks.INDICATORS.length)];
 
     var result = await stocks.technicalIndicator({
       symbol: symbols[Math.floor(Math.random() * symbols.length)],
@@ -135,7 +136,8 @@ function technicalIndicatorDates (start, end, i) {
       indicator: indicator,
       start: start,
       end: end,
-      time_period: Math.ceil(Math.random() * 10) + 1
+      time_period: Math.ceil(Math.random() * 10) + 1,
+      series_type: 'low'
     });
 
     // Check if all dates are between start an end
@@ -147,7 +149,7 @@ function technicalIndicatorDates (start, end, i) {
     }
 
     // Check if the first element has all values
-    expect(result[0]).to.have.all.keys(indicator, 'date');
+    expect(result[0]).to.have.all.keys('date');
   });
 }
 
