@@ -228,7 +228,7 @@ The result of such a request will be an object containing the following values:
 
 ```js
 Utilities, Consumer Staples, Real Estate, Consumer Discretionary,
-Telecommunication Services, Materials, Financials, Health Care,
+Communication Services, Materials, Financials, Health Care,
 Information Technology, Industrials, Energy
 ```
 
